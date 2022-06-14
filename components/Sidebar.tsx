@@ -1,12 +1,11 @@
 import Image from "next/image"
-import { Current } from "../pages";
+import { Current } from "../types";
 import imageArr from '../assets/images';
 import weatherImageObj from '../assets/weatherImages';
+import switchWeatherImgArr from '../utils/utils';
 
 const Sidebar:React.FC<Current>=(props)=>{
-    console.log(props)
-    //let isClear=props.weather[0].main;
-    /*let weatherSvg=isClear==='clear' ?   */
+   
     let day=new Date().toLocaleString(
         'default', {weekday: 'long'}
     );
@@ -14,21 +13,7 @@ const Sidebar:React.FC<Current>=(props)=>{
     let time=new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
     let randomNum=Math.floor(Math.random() * 5);
     let randomImg=imageArr[randomNum];
-
-    const switchWeatherImgArr=(key:string)=>{ 
-        switch (key) {
-            case 'Rain':
-               return weatherImageObj.rain;
-            case 'Clouds':
-               return weatherImageObj.clouds;
-            case 'Clear':
-                return weatherImageObj.sunny;
-            default:
-                return weatherImageObj.sunny;
-        }
-    }
-    
-    let weatherImg=switchWeatherImgArr(props.weather[0].main);
+    let weatherImg=switchWeatherImgArr(props.weather[0].main,weatherImageObj);
 
     return(
         <div className="text-lg lg:w-[22%] md:w-[35%] px-3 py-6 xs:px-6 font-mono">
