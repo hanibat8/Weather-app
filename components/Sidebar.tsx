@@ -51,7 +51,7 @@ const Sidebar:React.FC<PropsType>=(props)=>{
                         <input id="lat" name="lat" placeholder="Enter latitude" className="text-sm p-2 inline-block w-1/2"/>
                         <input id="long" name="long" placeholder="Enter longitude" className="text-sm p-2 inline-block w-1/2"/>
                     </div>
-                    <span>{props.error? props.error:''}</span>
+                    <span className="text-rose-800">{props.error? props.error:''}</span>
                 </div>
             </form>
             

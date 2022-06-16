@@ -20,7 +20,19 @@ const Home: NextPage<PropsType> = (props) => {
   const [coordObj,setCoordObj]=useState<{lat:string,long:string}>({lat:''+props.lat,long:''+props.lon});
   const [tempUnit,setTempUnit]=useState('°C');
 
-  const { data, error, isValidating } = useSWR( tempUnit=== '°C'?`https://api.openweathermap.org/data/2.5/onecall?lat=${coordObj.lat}&lon=${coordObj.long}&exclude=minutely&appid=27902dedefb3fbc3b24431f28cd7ebeb&units=metric`:`https://api.openweathermap.org/data/2.5/onecall?lat=${coordObj.lat}&lon=${coordObj.long}&exclude=minutely&appid=27902dedefb3fbc3b24431f28cd7ebeb&units=imperial`, fetcher);
+  const { data, error, isValidating } = useSWR( tempUnit=== '°C'?`https://api.openweathermap.org/data/2.5/onecall?lat=${coordObj.lat}&lon=${coordObj.long}&exclude=minutely&appid=27902dedefb3fbc3b24431f28cd7ebeb&units=metric`:`https://api.openweathermap.org/data/2.5/onecall?lat=${coordObj.lat}&lon=${coordObj.long}&exclude=minutely&appid=27902dedefb3fbc3b24431f28cd7ebeb&units=imperial`, fetcher, {
+    revalidateOnFocus: false,
+    onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+      // Never retry on 404.
+      if (error.status === 404) return
+
+      // Only retry up to 10 times.
+      if (retryCount >= 5) return
+  
+      // Retry after 5 seconds.
+      setTimeout(() => revalidate({ retryCount }), 5000)
+    }
+  });
   
   const [width,setWidth]=useState(0);
   const carousal:any=useRef();
