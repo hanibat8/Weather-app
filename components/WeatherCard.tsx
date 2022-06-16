@@ -80,7 +80,7 @@ const WeatherCard:React.FC<Props>=(props)=>{
     let weatherImg=switchWeatherImgArr(props.weather[0].main,weatherImageObj);
 
     return(
-        <div className="h-40 w-40 min-w-[160px] bg-white rounded-[20px] shadow-md flex flex-col py-5 pointer-events-none">
+        <div className="h-40 w-40 min-w-[160px] bg-white rounded-[20px] shadow-md flex flex-col py-5 pointer-events-none lg:w-44 lg:h-44">
             <h3 className=" mx-auto text-slate-500 mb-2">{cardTitle}</h3>
             <Image
                 src={weatherImg}
@@ -88,7 +88,7 @@ const WeatherCard:React.FC<Props>=(props)=>{
                 height={70}
                 width={50}/>
             <div className="mx-auto">
-                {typeof props.temp==="number" ? <span>{props.temp}{props.tempUnit}</span> : <><span>{props.temp.min.toFixed(1)}{props.tempUnit}-</span><span className="text-slate-500">{props.temp.max.toFixed(1)}{props.tempUnit}</span></>}
+                {typeof props.temp==="number" ? <span>{props.temp}{props.tempUnit}</span> : <><span>{props.temp.min.toFixed(0)}{props.tempUnit}-</span><span className="text-slate-500">{props.temp.max.toFixed(0)}{props.tempUnit}</span></>}
             </div>
         </div>
     )

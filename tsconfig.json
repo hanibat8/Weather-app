@@ -15,6 +15,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "assets/images.js"],
+  "include": ["./global-types.d.ts","next-env.d.ts", "**/*.ts", "**/*.tsx", "assets/images.js"],
   "exclude": ["node_modules"]
 }

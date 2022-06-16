@@ -1,10 +1,32 @@
+import { error } from "console";
 import Image from "next/image"
-import { Current } from "../types";
 import imageArr from '../assets/images';
 import weatherImageObj from '../assets/weatherImages';
 import switchWeatherImgArr from '../utils/utils';
 
-const Sidebar:React.FC<Current>=(props)=>{
+interface PropsType{
+    tempUnit:string,
+    onSearch:(e: React.FormEvent<HTMLFormElement>)=>void;
+    error:any
+    timezone: string;
+    dt: number;
+    sunrise: number;
+    sunset: number;
+    temp: number;
+    feels_like: number;
+    pressure: number;
+    humidity: number;
+    dew_point: number;
+    uvi: number;
+    clouds: number;
+    visibility: number;
+    wind_speed: number;
+    wind_deg: number;
+    wind_gust: number;
+    weather: { id: number, main: string, description: string, icon:string }[] ;
+}
+
+const Sidebar:React.FC<PropsType>=(props)=>{
    
     let day=new Date().toLocaleString(
         'default', {weekday: 'long'}
@@ -16,14 +38,20 @@ const Sidebar:React.FC<Current>=(props)=>{
     let weatherImg=switchWeatherImgArr(props.weather[0].main,weatherImageObj);
 
     return(
-        <div className="text-lg lg:w-[22%] md:w-[35%] px-3 py-6 xs:px-6 font-mono">
-            
-            <form className="w-full">
+        <div className="text-lg lg:w-[22%] md:w-[35%] px-3 py-6 xs:px-6 font-mono flex flex-col justify-between lg:text-xl">
+            <h2>Search cities using coords</h2>
+            <form onSubmit={(e)=>{e.preventDefault(); props.onSearch(e)}} className="w-full">
                 <div className="flex justify-center md:justify-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline-block self-center flex-none" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
-                    </svg>
-                    <input placeholder="Search for places..." className="p-2 inline-block"/>
+                    <button className="cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline-block self-center flex-none" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+                        </svg>
+                    </button>
+                    <div className="flex ">
+                        <input id="lat" name="lat" placeholder="Enter latitude" className="text-sm p-2 inline-block w-1/2"/>
+                        <input id="long" name="long" placeholder="Enter longitude" className="text-sm p-2 inline-block w-1/2"/>
+                    </div>
+                    <span>{props.error? props.error:''}</span>
                 </div>
             </form>
             
@@ -35,7 +63,7 @@ const Sidebar:React.FC<Current>=(props)=>{
             </div>
             
             <div className="pb-8 border-b-2 border-slate-100">
-                <p className="text-5xl font-light mb-5">{props.temp.toFixed(0)}<span>{'°c'}</span></p>
+                <p className="text-5xl font-light mb-5">{props.temp.toFixed(0)}<span>{props.tempUnit}</span></p>
                 <p className="">{day},<span className="text-slate-400 font-light">{time}</span></p>
             </div>
             
@@ -50,12 +78,12 @@ const Sidebar:React.FC<Current>=(props)=>{
                         <path strokeLinejoin="round" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="1" stroke="#293449" d="M18.7 15.6954L17.6 14.5954"></path>
                         <path strokeLinejoin="round" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="1" stroke="#293449" d="M17.6 5.39999L18.7 4.29999"></path>
                         <path strokeLinejoin="round" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="1" stroke="#293449" d="M19.4 9.99707H21"></path></svg>
-                    <span>{`Feels like ${props.feels_like} °c`}</span>
+                    <span>&nbsp;{`Feels like ${props.feels_like.toFixed(0)} ${props.tempUnit}`}</span>
                 </div>
                 <div className="font-light flex">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-reactroot="">
                         <path strokeLinejoin="round" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="1" stroke="#293449" fill="none" d="M18.1 9.7C17.3 7.6 15.2 6 12.7 6C9.5 6 6.9 8.5 6.9 11.7C6.9 11.8 6.9 11.9 6.9 12C6.4 11.7 5.9 11.6 5.3 11.6C3.5 11.5 2 13 2 14.8C2 16.6 3.5 18 5.3 18H17.9C20.2 18 22 16 22 13.8C22 11.6 20.3 9.9 18.1 9.7Z"></path></svg>
-                    <span className="">{`Cloudy ${props.clouds}%`}</span>
+                    <span className="">&nbsp;{`Cloudy ${props.clouds}%`}</span>
                 </div>
             </div>
             
@@ -68,7 +96,7 @@ const Sidebar:React.FC<Current>=(props)=>{
                 height={100}
                 width={250}/>
                 
-                <h2 className="absolute text-center inset-1/3  text-white drop-shadow-sm">{'Riyadh'}</h2>
+                <h2 className="absolute text-center inset-1/3  text-white drop-shadow-sm">{props.timezone}</h2>
             </div>
 
         </div>
